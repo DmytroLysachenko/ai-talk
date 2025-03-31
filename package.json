@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
-    "ai": "^4.2.8",
+    "@radix-ui/react-slot": "^1.1.2",
+    "@types/dom-speech-recognition": "^0.0.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
@@ -21,7 +22,6 @@
     "next-auth": "^5.0.0-beta.25",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-speech-recognition": "^4.0.0",
     "tailwind-merge": "^3.0.2",
     "tw-animate-css": "^1.2.5"
   },
