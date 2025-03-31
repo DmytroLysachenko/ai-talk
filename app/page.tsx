@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { getAnswer } from "@/lib/actions/chat.action";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
@@ -9,12 +10,20 @@ export default function Home() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [messagesLog, setMessagesLog] = useState<
     { author: string; message: string }[]
-  >([
-    { author: "you", message: "hey now" },
-    { author: "you", message: "hey now" },
-  ]);
+  >([]);
   const [currentSpeech, setCurrentSpeech] = useState("");
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  const handleFetchAnswer = async (
+    messagesLog: { author: string; message: string }[]
+  ) => {
+    const { success, answer } = await getAnswer(messagesLog);
+    if (!success || !answer) {
+      console.log("failed to fetch answer");
+      return;
+    }
+    setMessagesLog((prev) => [...prev, { author: "ai", message: answer }]);
+  };
 
   useEffect(() => {
     const SpeechRecognition =
@@ -57,6 +66,11 @@ export default function Home() {
             { author: "you", message: currentSpeech.trim() },
           ]);
           setCurrentSpeech("");
+
+          handleFetchAnswer([
+            ...messagesLog,
+            { author: "you", message: currentSpeech.trim() },
+          ]);
         }
       }
     }
@@ -67,8 +81,14 @@ export default function Home() {
     };
   }, [isSpeaking]);
 
-  const toggleSpeaking = () => {
+  const handleStartSpeaking = () => {
     setIsSpeaking((prev) => !prev);
+  };
+
+  const handleEndSpeaking = () => {
+    setTimeout(() => {
+      setIsSpeaking((prev) => !prev);
+    }, 1000);
   };
 
   return (
@@ -89,6 +109,7 @@ export default function Home() {
             </p>
           )}
         </div>
+
         <Button
           variant="ghost"
           className={cn(
@@ -97,7 +118,7 @@ export default function Home() {
               ? "bg-green-300 hover:bg-green-400"
               : "bg-gray-300 hover:bg-gray-400"
           )}
-          onClick={toggleSpeaking}
+          onClick={isSpeaking ? handleEndSpeaking : handleStartSpeaking}
         >
           <Image
             src="/microphone.svg"
