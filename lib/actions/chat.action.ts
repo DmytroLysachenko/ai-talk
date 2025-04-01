@@ -70,3 +70,24 @@ export const generateAudio = async (message: string) => {
     return { success: false, error: "Failed to generate audio" };
   }
 };
+
+// export const generateAudio = async (message: string) => {
+//   try {
+//     const response = await openAiClient.audio.speech.create({
+//       input: message,
+//       model: "gpt-4o-mini-tts",
+//       voice: "fable",
+//       response_format: "mp3",
+//       speed: 1.0,
+//     });
+
+//     const audioBuffer = await response.arrayBuffer();
+
+//     const audioBase64 = Buffer.from(audioBuffer).toString("base64");
+
+//     return { success: true, audio: audioBase64 };
+//   } catch (error) {
+//     console.error("Audio generation error:", error);
+//     return { success: false, error: "Failed to generate audio" };
+//   }
+// };

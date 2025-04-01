@@ -6,11 +6,13 @@ import { generateAudio, getAnswer } from "@/lib/actions/chat.action";
 import useAudio from "@/lib/hooks/useAudio";
 import useChat from "@/lib/hooks/useChat";
 import useSpeechRecognition from "@/lib/hooks/useSpeechRecognition";
+import { useState } from "react";
 
 export default function Home() {
   const { messagesLog, addMessage } = useChat();
+  const [selectedLanguage, setSelectedLanguage] = useState("en-US");
   const { currentSpeech, isSpeaking, startSpeaking, stopSpeaking } =
-    useSpeechRecognition();
+    useSpeechRecognition(selectedLanguage);
   const { isPlaying, playLastMessage, lastMessageAudio, setLastMessageAudio } =
     useAudio();
 
@@ -58,8 +60,6 @@ export default function Home() {
       if (audioDataUrl) {
         setLastMessageAudio(audioDataUrl);
       }
-
-      playLastMessage();
     }
   };
 
