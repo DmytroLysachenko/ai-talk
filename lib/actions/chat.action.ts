@@ -1,6 +1,6 @@
 "use server";
 
-import { aiClient } from "../ai";
+import { kokoroAiClient, openAiClient } from "../ai";
 
 export const getAnswer = async (
   chatLog: { author: string; message: string }[]
@@ -14,8 +14,8 @@ export const getAnswer = async (
       .map((message) => `${message.author}: ${message.message}`)
       .join("\n");
 
-    const reply = await aiClient.chat.completions.create({
-      model: "gpt-4",
+    const reply = await openAiClient.chat.completions.create({
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
@@ -27,6 +27,7 @@ export const getAnswer = async (
           5. Progress the conversation naturally
           6. Provide subtle corrections if mistakes are repeated
           7. Suggest related topics when appropriate
+          8. Do not be over emotional and positive about the conversation, be more natural and keep 
           
           Current conversation context:
           ${chatTranscription}`,
@@ -44,7 +45,28 @@ export const getAnswer = async (
     console.log(error);
     return {
       success: false,
-      answer: "Sorry, I couldn't process that. Could you try again?",
+      error: "Answer could not be generated, try again later.",
     };
+  }
+};
+
+export const generateAudio = async (message: string) => {
+  try {
+    const response = await kokoroAiClient.audio.speech.create({
+      input: message,
+      model: "kokoro",
+      voice: "af_bella",
+      response_format: "mp3",
+      speed: 1.0,
+    });
+
+    const audioBuffer = await response.arrayBuffer();
+
+    const audioBase64 = Buffer.from(audioBuffer).toString("base64");
+
+    return { success: true, audio: audioBase64 };
+  } catch (error) {
+    console.error("Audio generation error:", error);
+    return { success: false, error: "Failed to generate audio" };
   }
 };

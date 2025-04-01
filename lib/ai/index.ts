@@ -1,5 +1,9 @@
 import OpenAI from "openai";
 
-export const aiClient = new OpenAI({
+export const openAiClient = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
+});
+
+export const kokoroAiClient = new OpenAI({
+  baseURL: "https://api.kokorotts.com/v1",
 });

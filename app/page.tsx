@@ -1,94 +1,66 @@
 "use client";
 
+import MicrophoneButton from "@/components/MicrophoneButton";
 import { Button } from "@/components/ui/button";
-import { getAnswer } from "@/lib/actions/chat.action";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { generateAudio, getAnswer } from "@/lib/actions/chat.action";
+import useAudio from "@/lib/hooks/useAudio";
+import useChat from "@/lib/hooks/useChat";
+import useSpeechRecognition from "@/lib/hooks/useSpeechRecognition";
 
 export default function Home() {
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [messagesLog, setMessagesLog] = useState<
-    { author: string; message: string }[]
-  >([]);
-  const [currentSpeech, setCurrentSpeech] = useState("");
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const { messagesLog, addMessage } = useChat();
+  const { currentSpeech, isSpeaking, startSpeaking, stopSpeaking } =
+    useSpeechRecognition();
+  const { isPlaying, playLastMessage, lastMessageAudio, setLastMessageAudio } =
+    useAudio();
 
   const handleFetchAnswer = async (
     messagesLog: { author: string; message: string }[]
   ) => {
     const { success, answer } = await getAnswer(messagesLog);
+
     if (!success || !answer) {
-      console.log("failed to fetch answer");
-      return;
+      console.error("failed to fetch answer");
+      return "This answer failed to fetch, continue conversation";
     }
-    setMessagesLog((prev) => [...prev, { author: "ai", message: answer }]);
+
+    return answer;
   };
 
-  useEffect(() => {
-    const SpeechRecognition =
-      window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      console.error("Speech recognition not supported");
-      return;
+  const handleFetchAudio = async (message: string) => {
+    const { success, audio } = await generateAudio(message);
+
+    if (!success || !audio) {
+      console.error("failed to fetch audio response");
+      return "";
     }
 
-    if (isSpeaking) {
-      // Initialize recognition if not already done
-      if (!recognitionRef.current) {
-        recognitionRef.current = new SpeechRecognition();
-        recognitionRef.current.continuous = true;
-        recognitionRef.current.interimResults = false;
-        recognitionRef.current.lang = "en-US";
+    const audioDataUrl = `data:audio/mp3;base64,${audio}`;
 
-        recognitionRef.current.onresult = (event) => {
-          const transcript =
-            event.results[event.results.length - 1][0].transcript;
-          setCurrentSpeech((prev) => prev + " " + transcript);
-        };
-
-        recognitionRef.current.onerror = (event) => {
-          console.error("Speech recognition error", event.error);
-          setIsSpeaking(false);
-        };
-      }
-
-      // Start recognition
-      recognitionRef.current.start();
-    } else {
-      // Stop recognition and save accumulated speech
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-
-        if (currentSpeech.trim()) {
-          setMessagesLog((prev) => [
-            ...prev,
-            { author: "you", message: currentSpeech.trim() },
-          ]);
-          setCurrentSpeech("");
-
-          handleFetchAnswer([
-            ...messagesLog,
-            { author: "you", message: currentSpeech.trim() },
-          ]);
-        }
-      }
-    }
-
-    return () => {
-      // Cleanup on unmount
-      recognitionRef.current?.stop();
-    };
-  }, [isSpeaking]);
-
-  const handleStartSpeaking = () => {
-    setIsSpeaking((prev) => !prev);
+    return audioDataUrl;
   };
 
-  const handleEndSpeaking = () => {
-    setTimeout(() => {
-      setIsSpeaking((prev) => !prev);
-    }, 1000);
+  const handleEndSpeaking = async () => {
+    const userMessage = await stopSpeaking();
+
+    addMessage({ author: "user", message: userMessage });
+
+    const message = await handleFetchAnswer([
+      ...messagesLog,
+      { author: "user", message: userMessage },
+    ]);
+
+    if (message) {
+      addMessage({ author: "ai", message });
+
+      const audioDataUrl = await handleFetchAudio(message);
+
+      if (audioDataUrl) {
+        setLastMessageAudio(audioDataUrl);
+      }
+
+      playLastMessage();
+    }
   };
 
   return (
@@ -98,7 +70,7 @@ export default function Home() {
           {messagesLog.map((m, index) => (
             <p
               key={`${m.author}-${index}`}
-              className={m.author === "you" ? "text-blue-500" : ""}
+              className={m.author === "user" ? "text-blue-500" : ""}
             >
               {m.author} : {m.message}
             </p>
@@ -110,23 +82,18 @@ export default function Home() {
           )}
         </div>
 
+        <MicrophoneButton
+          isSpeaking={isSpeaking}
+          handleStartSpeaking={startSpeaking}
+          handleEndSpeaking={handleEndSpeaking}
+        />
+
         <Button
           variant="ghost"
-          className={cn(
-            "rounded-full",
-            isSpeaking
-              ? "bg-green-300 hover:bg-green-400"
-              : "bg-gray-300 hover:bg-gray-400"
-          )}
-          onClick={isSpeaking ? handleEndSpeaking : handleStartSpeaking}
+          disabled={isPlaying || !lastMessageAudio}
+          onClick={playLastMessage}
         >
-          <Image
-            src="/microphone.svg"
-            width={32}
-            height={32}
-            alt="microphone"
-            className={cn("size-5", isSpeaking && "animate-bounce")}
-          />
+          Replay last message
         </Button>
       </div>
     </main>
