@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-const useSpeechRecognition = () => {
+const useSpeechRecognition = (language: string) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentSpeech, setCurrentSpeech] = useState("");
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -18,7 +18,7 @@ const useSpeechRecognition = () => {
     recognitionRef.current = new SpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = true; // Changed to true to get real-time results
-    recognitionRef.current.lang = "en-US";
+    recognitionRef.current.lang = language;
 
     const handleResult = (event: SpeechRecognitionEvent) => {
       const transcript = Array.from(event.results)
