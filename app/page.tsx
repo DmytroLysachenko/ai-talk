@@ -2,24 +2,27 @@
 
 import MicrophoneButton from "@/components/MicrophoneButton";
 import { Button } from "@/components/ui/button";
-import { generateAudio, getAnswer } from "@/lib/actions/chat.action";
-import useAudio from "@/lib/hooks/useAudio";
+import { getAnswer } from "@/lib/actions/chat.action";
+import useAudioStream from "@/lib/hooks/useAudioStream";
 import useChat from "@/lib/hooks/useChat";
 import useSpeechRecognition from "@/lib/hooks/useSpeechRecognition";
-import { useState } from "react";
 
-export default function Home() {
+// import { useState } from "react";
+
+const Home = () => {
+  const isFree = true;
+  // const [selectedLanguage, setSelectedLanguage] = useState("en-US");
+
   const { messagesLog, addMessage } = useChat();
-  const [selectedLanguage, setSelectedLanguage] = useState("en-US");
   const { currentSpeech, isSpeaking, startSpeaking, stopSpeaking } =
-    useSpeechRecognition(selectedLanguage);
-  const { isPlaying, playLastMessage, lastMessageAudio, setLastMessageAudio } =
-    useAudio();
+    useSpeechRecognition("en-US");
+
+  const { isStreaming, playStreamedAudio } = useAudioStream();
 
   const handleFetchAnswer = async (
     messagesLog: { author: string; message: string }[]
   ) => {
-    const { success, answer } = await getAnswer(messagesLog);
+    const { success, answer } = await getAnswer({ messagesLog, isFree });
 
     if (!success || !answer) {
       console.error("failed to fetch answer");
@@ -27,19 +30,6 @@ export default function Home() {
     }
 
     return answer;
-  };
-
-  const handleFetchAudio = async (message: string) => {
-    const { success, audio } = await generateAudio(message);
-
-    if (!success || !audio) {
-      console.error("failed to fetch audio response");
-      return "";
-    }
-
-    const audioDataUrl = `data:audio/mp3;base64,${audio}`;
-
-    return audioDataUrl;
   };
 
   const handleEndSpeaking = async () => {
@@ -55,18 +45,25 @@ export default function Home() {
     if (message) {
       addMessage({ author: "ai", message });
 
-      const audioDataUrl = await handleFetchAudio(message);
-
-      if (audioDataUrl) {
-        setLastMessageAudio(audioDataUrl);
-      }
+      playStreamedAudio(message);
     }
   };
 
+  // const handleReplayLastMessage = () => {
+  //   if (messagesLog.length > 0) {
+  //     const lastAiMessage = [...messagesLog]
+  //       .reverse()
+  //       .find((m) => m.author === "ai");
+  //     if (lastAiMessage && isConnected) {
+  //       generateAudio(lastAiMessage.message);
+  //     }
+  //   }
+  // };
+
   return (
-    <main className="min-h-screen">
-      <div className="flex flex-col justify-between items-center min-h-[600px] py-10 px-5 gap-5">
-        <div className="flex flex-1 w-[600px] flex-col gap-5 justify-end py-5 border p-4 rounded-2xl">
+    <main className="min-h-screen flex w-full px-5 md:px-10 lg:px-20">
+      <div className="flex flex-col justify-between items-center py-10 px-5 gap-5 w-full">
+        <div className="flex flex-1 flex-col gap-5 justify-end py-5 border p-4 rounded-2xl w-full">
           {messagesLog.map((m, index) => (
             <p
               key={`${m.author}-${index}`}
@@ -82,20 +79,25 @@ export default function Home() {
           )}
         </div>
 
-        <MicrophoneButton
-          isSpeaking={isSpeaking}
-          handleStartSpeaking={startSpeaking}
-          handleEndSpeaking={handleEndSpeaking}
-        />
+        <div className="flex flex-col gap-4 items-center">
+          <MicrophoneButton
+            isSpeaking={isSpeaking}
+            handleStartSpeaking={startSpeaking}
+            handleEndSpeaking={handleEndSpeaking}
+          />
 
-        <Button
-          variant="ghost"
-          disabled={isPlaying || !lastMessageAudio}
-          onClick={playLastMessage}
-        >
-          Replay last message
-        </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              disabled={isStreaming}
+            >
+              Replay last message
+            </Button>
+          </div>
+        </div>
       </div>
     </main>
   );
-}
+};
+
+export default Home;

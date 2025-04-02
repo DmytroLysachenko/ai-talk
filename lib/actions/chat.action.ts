@@ -1,46 +1,63 @@
 "use server";
 
-import { kokoroAiClient, openAiClient } from "../ai";
+import { openAiClient, googleGenAiClient } from "../ai";
 
-export const getAnswer = async (
-  chatLog: { author: string; message: string }[]
-) => {
-  console.log(chatLog);
+export const getAnswer = async ({
+  messagesLog,
+  isFree,
+}: {
+  messagesLog: { author: string; message: string }[];
+  isFree: boolean;
+}) => {
   try {
     const lastUserMessage =
-      chatLog.filter((msg) => msg.author === "user").pop()?.message || "";
+      messagesLog.filter((msg) => msg.author === "user").pop()?.message || "";
 
-    const chatTranscription = chatLog
+    const chatTranscription = messagesLog
       .map((message) => `${message.author}: ${message.message}`)
       .join("\n");
+    const message = `You are a polite language learning assistant. Your task is to:
+        1. Maintain a friendly, encouraging tone
+        2. Adapt vocabulary and sentence complexity to the user's apparent level
+        3. Gently introduce 1-2 new useful words/phrases per response
+        4. Keep responses under 75 words (shorter for beginners)
+        5. Progress the conversation naturally
+        6. Provide subtle corrections if mistakes are repeated
+        7. Suggest related topics when appropriate
+        8. Keep it natural, avoid excessive enthusiasm.
+        
+        Current conversation context:
+        ${chatTranscription}
+        
+        User: ${lastUserMessage}`;
+    if (isFree) {
+      // Use Gemini AI (Google's API)
+      const response = await googleGenAiClient.chats
+        .create({ model: "gemini-2.0-flash" })
+        .sendMessage({
+          message,
+        });
 
-    const reply = await openAiClient.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `You are a polite language learning assistant. Your task is to:
-          1. Maintain a friendly, encouraging tone
-          2. Adapt vocabulary and sentence complexity to the user's apparent level
-          3. Gently introduce 1-2 new useful words/phrases per response
-          4. Keep responses under 75 words (shorter for beginners)
-          5. Progress the conversation naturally
-          6. Provide subtle corrections if mistakes are repeated
-          7. Suggest related topics when appropriate
-          8. Do not be over emotional and positive about the conversation, be more natural and keep 
-          
-          Current conversation context:
-          ${chatTranscription}`,
-        },
-        {
-          role: "user",
-          content: lastUserMessage,
-        },
-      ],
-      max_tokens: 100,
-    });
+      return { success: true, answer: response.text };
+    } else {
+      // Use OpenAI GPT-4o-mini
+      const response = await openAiClient.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: message,
+          },
+          {
+            role: "user",
+            content: lastUserMessage,
+          },
+        ],
+        max_tokens: 100,
+      });
 
-    return { success: true, answer: reply.choices[0].message.content };
+      return { success: true, answer: response.choices[0].message.content };
+    }
   } catch (error) {
     console.log(error);
     return {
@@ -50,15 +67,37 @@ export const getAnswer = async (
   }
 };
 
-export const generateAudio = async (message: string) => {
+export const generateAudio = async ({
+  message,
+  isFree,
+}: {
+  message: string;
+  isFree: boolean;
+}) => {
   try {
-    const response = await kokoroAiClient.audio.speech.create({
-      input: message,
-      model: "kokoro",
-      voice: "af_bella",
-      response_format: "mp3",
-      speed: 1.0,
-    });
+    let response;
+
+    if (isFree) {
+      response = await openAiClient.audio.speech.create({
+        input: message,
+        instructions:
+          "Please keep the tone of the voice natural and friendly, don't be over emotional",
+        model: "gpt-4o-mini-tts",
+        voice: "alloy",
+        response_format: "mp3",
+        speed: 1.0,
+      });
+    } else {
+      response = await openAiClient.audio.speech.create({
+        input: message,
+        instructions:
+          "Please keep the tone of the voice natural and friendly, don't be over emotional",
+        model: "gpt-4o-mini-tts",
+        voice: "alloy",
+        response_format: "mp3",
+        speed: 1.0,
+      });
+    }
 
     const audioBuffer = await response.arrayBuffer();
 
@@ -70,24 +109,3 @@ export const generateAudio = async (message: string) => {
     return { success: false, error: "Failed to generate audio" };
   }
 };
-
-// export const generateAudio = async (message: string) => {
-//   try {
-//     const response = await openAiClient.audio.speech.create({
-//       input: message,
-//       model: "gpt-4o-mini-tts",
-//       voice: "fable",
-//       response_format: "mp3",
-//       speed: 1.0,
-//     });
-
-//     const audioBuffer = await response.arrayBuffer();
-
-//     const audioBase64 = Buffer.from(audioBuffer).toString("base64");
-
-//     return { success: true, audio: audioBase64 };
-//   } catch (error) {
-//     console.error("Audio generation error:", error);
-//     return { success: false, error: "Failed to generate audio" };
-//   }
-// };

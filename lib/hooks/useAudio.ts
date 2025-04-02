@@ -19,27 +19,24 @@ const useAudio = () => {
   };
 
   useEffect(() => {
+    if (!lastMessageAudio) return;
+
     const audio = new Audio();
+    audio.src = lastMessageAudio;
     audioRef.current = audio;
 
     const handleEnded = () => setIsPlaying(false);
     audio.addEventListener("ended", handleEnded);
 
+    audio.play().catch((error) => {
+      console.error("Audio playback failed:", error);
+      setIsPlaying(false);
+    });
+
     return () => {
       audio.removeEventListener("ended", handleEnded);
       audio.pause();
     };
-  }, []);
-
-  useEffect(() => {
-    if (!lastMessageAudio || !audioRef.current) return;
-
-    audioRef.current.src = lastMessageAudio;
-
-    audioRef.current.play().catch((error) => {
-      console.error("Audio playback failed:", error);
-      setIsPlaying(false);
-    });
   }, [lastMessageAudio]);
 
   return { isPlaying, playLastMessage, lastMessageAudio, setLastMessageAudio };
