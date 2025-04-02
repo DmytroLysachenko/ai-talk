@@ -17,7 +17,7 @@ const useAudioStream = () => {
     );
 
     newSocket.on("audio_chunk", (data) => {
-      setAudioQueue((prev) => [...prev, data]); // Trigger re-render
+      setAudioQueue((prev) => [...prev, data]); // Queue up new audio chunks
     });
 
     newSocket.on("audio_end", () => {
@@ -34,30 +34,37 @@ const useAudioStream = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!isPlaying && audioQueue.length > 0) {
+      playNextChunk();
+    }
+  }, [audioQueue, isPlaying]); // <-- TRIGGERS on queue update!
+
+  const playNextChunk = async () => {
+    if (audioQueue.length === 0 || isPlaying) return; // Prevent double playing
+
+    setIsPlaying(true);
+    const chunk = audioQueue[0];
+
+    if (chunk) {
+      const audio = new Audio(`data:audio/wav;base64,${chunk}`);
+
+      audio.addEventListener("ended", () => {
+        setIsPlaying(false);
+        setAudioQueue((prev) => prev.slice(1)); // Remove played chunk
+      });
+
+      audio.addEventListener("canplaythrough", () => {
+        audio.play().catch((err) => console.error("Audio play error:", err));
+      });
+    }
+  };
+
   const playStreamedAudio = (message: string) => {
     if (isStreaming || !socket) return;
     setIsStreaming(true);
-    setAudioQueue([]);
-
+    setAudioQueue([]); // Clear previous queue
     socket.emit("generate_audio", message);
-
-    const playNextChunk = async () => {
-      if (audioQueue.length > 0 && !isPlaying) {
-        setIsPlaying(true);
-        const chunk = audioQueue.shift();
-        if (chunk) {
-          const audio = new Audio(`data:audio/mp3;base64,${chunk}`);
-          audio.addEventListener("canplaythrough", () => {
-            audio.play().then(() => {
-              setIsPlaying(false);
-              playNextChunk(); // Play next chunk after current finishes
-            });
-          });
-        }
-      }
-    };
-
-    playNextChunk();
   };
 
   return { isStreaming, playStreamedAudio };

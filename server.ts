@@ -20,28 +20,34 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {
+const tts = await KokoroTTS.from_pretrained(
+  "onnx-community/Kokoro-82M-v1.0-ONNX",
+  { dtype: "fp32" }
+);
+
+console.log("✅ Model loaded and ready.");
+
+io.on("connection", async (socket) => {
   console.log("✅ Client connected");
 
   socket.on("generate_audio", async (message) => {
+    console.log("Received message:", message);
     try {
-      const tts = await KokoroTTS.from_pretrained(
-        "onnx-community/Kokoro-82M-v1.0-ONNX",
-        {
-          dtype: "fp32",
-        }
-      );
-
       const splitter = new TextSplitterStream();
       const stream = tts.stream(splitter);
 
+      splitter.push(message); // Send text into the stream
+      splitter.close(); // Properly close the input
+
       for await (const { audio } of stream) {
         if (audio) {
-          const audioBlob = audio.toBlob();
-          const buffer = await audioBlob.arrayBuffer();
-          const base64Audio = Buffer.from(buffer).toString("base64");
+          const buffer = audio.toWav();
+          console.log("Generated WAV buffer size:", buffer.byteLength); // Correct property
 
+          const base64Audio = Buffer.from(buffer).toString("base64");
           socket.emit("audio_chunk", base64Audio);
+
+          await new Promise((resolve) => setTimeout(resolve, 200)); // Delay for smooth streaming
         }
       }
 
@@ -52,14 +58,12 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("disconnect", () => {
-    console.log("❌ Client disconnected");
-  });
+  socket.on("disconnect", () => console.log("❌ Client disconnected"));
 });
 
 // Start server
 const PORT = process.env.SOCKET_PORT || 3001;
 server.listen(PORT, async () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Web-socket Server running on http://localhost:${PORT}`);
   await nextApp.prepare();
 });
