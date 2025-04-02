@@ -2,13 +2,9 @@
 
 import { openAiClient, googleGenAiClient } from "../ai";
 
-export const getAnswer = async ({
-  messagesLog,
-  isFree,
-}: {
-  messagesLog: { author: string; message: string }[];
-  isFree: boolean;
-}) => {
+export const getAnswer = async (
+  messagesLog: { author: string; message: string }[]
+) => {
   try {
     const lastUserMessage =
       messagesLog.filter((msg) => msg.author === "user").pop()?.message || "";
@@ -16,6 +12,7 @@ export const getAnswer = async ({
     const chatTranscription = messagesLog
       .map((message) => `${message.author}: ${message.message}`)
       .join("\n");
+
     const message = `You are a polite language learning assistant. Your task is to:
         1. Maintain a friendly, encouraging tone
         2. Adapt vocabulary and sentence complexity to the user's apparent level
@@ -25,39 +22,21 @@ export const getAnswer = async ({
         6. Provide subtle corrections if mistakes are repeated
         7. Suggest related topics when appropriate
         8. Keep it natural, avoid excessive enthusiasm.
+        9. Do not use symbols not recognized by TTS models (such as emoji,*, /,\,|,~, etc.)
         
         Current conversation context:
         ${chatTranscription}
         
         User: ${lastUserMessage}`;
-    if (isFree) {
-      // Use Gemini AI (Google's API)
-      const response = await googleGenAiClient.chats
-        .create({ model: "gemini-2.0-flash" })
-        .sendMessage({
-          message,
-        });
 
-      return { success: true, answer: response.text };
-    } else {
-      // Use OpenAI GPT-4o-mini
-      const response = await openAiClient.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          {
-            role: "system",
-            content: message,
-          },
-          {
-            role: "user",
-            content: lastUserMessage,
-          },
-        ],
-        max_tokens: 100,
+    // Use Gemini AI (Google's API)
+    const response = await googleGenAiClient.chats
+      .create({ model: "gemini-2.0-flash" })
+      .sendMessage({
+        message,
       });
 
-      return { success: true, answer: response.choices[0].message.content };
-    }
+    return { success: true, answer: response.text };
   } catch (error) {
     console.log(error);
     return {

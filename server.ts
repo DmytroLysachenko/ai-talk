@@ -42,7 +42,7 @@ io.on("connection", async (socket) => {
       for await (const { audio } of stream) {
         if (audio) {
           const buffer = audio.toWav();
-          console.log("Generated WAV buffer size:", buffer.byteLength); // Correct property
+          // console.log("Generated WAV buffer size:", buffer.byteLength);
 
           const base64Audio = Buffer.from(buffer).toString("base64");
           socket.emit("audio_chunk", base64Audio);

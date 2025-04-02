@@ -10,19 +10,18 @@ import useSpeechRecognition from "@/lib/hooks/useSpeechRecognition";
 // import { useState } from "react";
 
 const Home = () => {
-  const isFree = true;
   // const [selectedLanguage, setSelectedLanguage] = useState("en-US");
 
   const { messagesLog, addMessage } = useChat();
   const { currentSpeech, isSpeaking, startSpeaking, stopSpeaking } =
     useSpeechRecognition("en-US");
 
-  const { isStreaming, playStreamedAudio } = useAudioStream();
+  const { isPlaying, playStreamedAudio } = useAudioStream();
 
   const handleFetchAnswer = async (
     messagesLog: { author: string; message: string }[]
   ) => {
-    const { success, answer } = await getAnswer({ messagesLog, isFree });
+    const { success, answer } = await getAnswer(messagesLog);
 
     if (!success || !answer) {
       console.error("failed to fetch answer");
@@ -48,17 +47,6 @@ const Home = () => {
       playStreamedAudio(message);
     }
   };
-
-  // const handleReplayLastMessage = () => {
-  //   if (messagesLog.length > 0) {
-  //     const lastAiMessage = [...messagesLog]
-  //       .reverse()
-  //       .find((m) => m.author === "ai");
-  //     if (lastAiMessage && isConnected) {
-  //       generateAudio(lastAiMessage.message);
-  //     }
-  //   }
-  // };
 
   return (
     <main className="min-h-screen flex w-full px-5 md:px-10 lg:px-20">
@@ -86,14 +74,15 @@ const Home = () => {
             handleEndSpeaking={handleEndSpeaking}
           />
 
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <Button
               variant="outline"
-              disabled={isStreaming}
+              disabled={isPlaying}
+              onClick={() => playPreviousMessage()}
             >
               Replay last message
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </main>
