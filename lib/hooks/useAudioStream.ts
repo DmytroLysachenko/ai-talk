@@ -29,7 +29,9 @@ const useAudioStream = () => {
 
     setSocket(newSocket);
 
-    return () => newSocket.disconnect();
+    return () => {
+      newSocket.disconnect();
+    };
   }, []);
 
   const playStreamedAudio = (message: string) => {
