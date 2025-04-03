@@ -1,49 +1,16 @@
 {
-  "name": "ai-talk",
-  "version": "0.1.0",
+  "name": "ai-talk-monorepo",
   "private": true,
-  "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "dev": "concurrently \"next dev --turbo -p 3000\" \"tsx server.ts\"",
-    "build": "next build",
-    "start": "concurrently \"next start -p 3000\" \"tsx server.ts\"",
-    "lint": "next lint",
-    "db:push": "npx drizzle-kit generate && npx drizzle-kit migrate"
-  },
-  "dependencies": {
-    "@google/genai": "^0.7.0",
-    "@neondatabase/serverless": "^1.0.0",
-    "@radix-ui/react-slot": "^1.1.2",
-    "@types/dom-speech-recognition": "^0.0.5",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.41.0",
-    "kokoro-js": "^1.2.0",
-    "lucide-react": "^0.485.0",
-    "next": "15.2.4",
-    "next-auth": "^5.0.0-beta.25",
-    "openai": "^4.91.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1",
-    "tailwind-merge": "^3.0.2",
-    "tw-animate-css": "^1.2.5"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/socket.io": "^3.0.2",
-    "concurrently": "^9.1.2",
-    "drizzle-kit": "^0.30.6",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.4",
-    "tailwindcss": "^4",
-    "tsx": "^4.19.3",
-    "typescript": "^5"
+    "dev:client": "npm run dev --workspace client",
+    "dev:server": "npm run dev --workspace server",
+    "build:client": "npm run build --workspace client",
+    "build:server": "npm run build --workspace server",
+    "start:client": "npm run start --workspace client",
+    "start:server": "npm run start --workspace server"
   }
 }

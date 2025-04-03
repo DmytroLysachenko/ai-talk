@@ -1,7 +1,7 @@
 import NextAuth, { User } from "next-auth";
 import Google from "next-auth/providers/google";
 
-import { createUser, getUserByEmail } from "./lib/actions/auth.action";
+import { createUser, getUserByEmail } from "../lib/actions/auth.action";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Google],

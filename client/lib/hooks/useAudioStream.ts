@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import io, { Socket } from "socket.io-client";
 
+const WS_SERVER = process.env.NEXT_PUBLIC_WS_SERVER || "http://localhost:3001"; // Use env variable
+
 const useAudioStream = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
@@ -8,16 +10,12 @@ const useAudioStream = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    const newSocket = io(
-      `http://localhost:${process.env.SOCKET_PORT || 3001}`,
-      {
-        path: "/api/socket",
-        transports: ["websocket"],
-      }
-    );
+    const newSocket = io(WS_SERVER, {
+      transports: ["websocket"],
+    });
 
     newSocket.on("audio_chunk", (data) => {
-      setAudioQueue((prev) => [...prev, data]); // Queue up new audio chunks
+      setAudioQueue((prev) => [...prev, data]);
     });
 
     newSocket.on("audio_end", () => {
@@ -38,10 +36,10 @@ const useAudioStream = () => {
     if (!isPlaying && audioQueue.length > 0) {
       playNextChunk();
     }
-  }, [audioQueue, isPlaying]); // <-- TRIGGERS on queue update!
+  }, [audioQueue, isPlaying]);
 
   const playNextChunk = async () => {
-    if (audioQueue.length === 0 || isPlaying) return; // Prevent double playing
+    if (audioQueue.length === 0 || isPlaying) return;
 
     setIsPlaying(true);
     const chunk = audioQueue[0];
@@ -51,23 +49,21 @@ const useAudioStream = () => {
 
       audio.addEventListener("ended", () => {
         setIsPlaying(false);
-        setAudioQueue((prev) => prev.slice(1)); // Remove played chunk
+        setAudioQueue((prev) => prev.slice(1));
       });
 
-      audio.addEventListener("canplaythrough", () => {
-        audio.play().catch((err) => console.error("Audio play error:", err));
-      });
+      audio.play().catch((err) => console.error("Audio play error:", err));
     }
   };
 
   const playStreamedAudio = (message: string) => {
     if (isStreaming || !socket) return;
     setIsStreaming(true);
-    setAudioQueue([]); // Clear previous queue
+    setAudioQueue([]);
     socket.emit("generate_audio", message);
   };
 
-  return { isStreaming, playStreamedAudio };
+  return { isPlaying, playStreamedAudio };
 };
 
 export default useAudioStream;
