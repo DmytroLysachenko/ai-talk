@@ -1,0 +1,84 @@
+2025-04-04T09:21:41.992Z [INFO]: ✅ New client connected
+2025-04-04T09:21:46.933Z [INFO]: 📥 Received message: "Hey! Not much, just here to help you learn some English. What's up with you?
+
+By the way, "What's up?" is a casual way to say "How are you?" or "What are you doing?". You can also say "Not much" or "Nothing much" as a response, like I did.
+"
+2025-04-04T09:21:56.285Z [INFO]: ✅ Audio streaming completed for message: "Hey! Not much, just here to help you learn some English. What's up with you?
+
+By the way, "What's up?" is a casual way to say "How are you?" or "What are you doing?". You can also say "Not much" or "Nothing much" as a response, like I did.
+"
+2025-04-04T09:22:35.648Z [INFO]: Loading TTS model...
+2025-04-04T09:22:35.708Z [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:22:37.220Z [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:22:37.253Z [INFO]: ✅ New client connected
+2025-04-04T09:22:57.855Z [INFO]: Loading TTS model...
+2025-04-04T09:22:57.911Z [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:22:59.306Z [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:22:59.322Z [INFO]: ✅ New client connected
+2025-04-04T09:24:43.794Z [INFO]: Loading TTS model...
+2025-04-04T09:24:43.850Z [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:24:45.331Z [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:24:45.348Z [INFO]: ✅ New client connected
+2025-04-04T09:25:48.870Z [INFO]: Loading TTS model...
+2025-04-04T09:25:48.920Z [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:25:50.713Z [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:25:50.806Z [INFO]: ✅ New client connected
+2025-04-04T09:26:14.460Z [INFO]: Loading TTS model...
+2025-04-04T09:26:14.518Z [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:26:15.761Z [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:26:18.195Z [INFO]: ✅ New client connected
+2025-04-04T09:26:37.593Z [INFO]: Loading TTS model...
+2025-04-04T09:26:37.627Z [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:26:38.728Z [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:26:38.743Z [INFO]: ✅ New client connected
+2025-04-04T09:27:15.410Z [INFO]: Loading TTS model...
+2025-04-04T09:27:15.450Z [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:27:16.731Z [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:27:16.743Z [INFO]: ✅ New client connected
+2025-04-04T09:27:54.286Z [INFO]: Loading TTS model...
+2025-04-04T09:27:54.323Z [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:27:55.470Z [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:27:55.482Z [INFO]: ✅ New client connected
+2025-04-04T09:30:00 [INFO]: Loading TTS model...
+2025-04-04T09:30:02 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:30:06 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:30:06 [INFO]: ✅ New client connected
+2025-04-04T09:30:29 [INFO]: Loading TTS model...
+2025-04-04T09:30:29 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:30:31 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:30:31 [INFO]: ✅ New client connected
+2025-04-04T09:31:08 [INFO]: Loading TTS model...
+2025-04-04T09:31:08 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:31:09 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:31:12 [INFO]: ✅ New client connected
+2025-04-04T09:33:23 [INFO]: Loading TTS model...
+2025-04-04T09:33:23 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:33:24 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:33:24 [INFO]: ✅ New client connected
+2025-04-04T09:33:51 [INFO]: Loading TTS model...
+2025-04-04T09:33:51 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:33:53 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:33:55 [INFO]: ✅ New client connected
+2025-04-04T09:35:23 [INFO]: Loading TTS model...
+2025-04-04T09:35:23 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:35:25 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:39:32 [INFO]: Loading TTS model...
+2025-04-04T09:39:32 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:39:37 [INFO]: ✅ New client connected
+2025-04-04T09:39:43 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:40:20 [INFO]: Loading TTS model...
+2025-04-04T09:40:21 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:40:22 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:40:22 [INFO]: ✅ New client connected
+2025-04-04T09:40:38 [INFO]: Loading TTS model...
+2025-04-04T09:40:38 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:40:39 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:40:41 [INFO]: ✅ New client connected
+2025-04-04T09:41:42 [INFO]: Loading TTS model...
+2025-04-04T09:41:42 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:41:43 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:41:43 [INFO]: ✅ New client connected
+2025-04-04T09:43:21 [INFO]: Loading TTS model...
+2025-04-04T09:43:21 [INFO]: 🚀 Server running on http://localhost:3001
+2025-04-04T09:43:22 [INFO]: ✅ TTS Model Loaded!
+2025-04-04T09:43:24 [INFO]: ✅ New client connected

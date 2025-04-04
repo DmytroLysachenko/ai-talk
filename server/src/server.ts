@@ -11,7 +11,9 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.printf(({ timestamp, level, message }) => {
-      return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+      return `${
+        String(timestamp).split(".")[0]
+      } [${level.toUpperCase()}]: ${message}`;
     })
   ),
   transports: [
@@ -56,11 +58,9 @@ let tts: KokoroTTS | null = null;
 })();
 
 io.on("connection", (socket) => {
-  logger.info("✅ New client connected");
+  logger.info("✅ New client connected", socket.id);
 
   socket.on("generate_audio", async (message: string) => {
-    logger.info(`📥 Received message: "${message}"`);
-
     if (!tts) {
       socket.emit("error", "TTS Model not loaded.");
       return;
@@ -91,7 +91,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    logger.info("❌ Client disconnected");
+    logger.info("❌ Client disconnected", socket.id);
   });
 });
 
