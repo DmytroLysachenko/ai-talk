@@ -3,7 +3,7 @@ import React from "react";
 
 const NotSupportedPage = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
+    <main className="flex flex-col items-center justify-center p-24">
       <div className="max-w-2xl mx-auto text-center">
         <h1 className="text-4xl font-bold mb-6 text-red-600">
           Browser Not Supported

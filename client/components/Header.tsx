@@ -17,19 +17,19 @@ import {
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Talking AI Pal",
-    href: "/",
+    href: "/talking-ai",
     description:
       "A talking AI assistant. Perfect for having conversations for english learning",
   },
   {
     title: "Fast text generation from speech.",
-    href: "/",
+    href: "/speech-convertor",
     description:
       "Express everything, what you have on your mind and AI will deal with converting it in a original, structured and easy to read text.",
   },
   {
     title: "Custom purpose AI chatbot",
-    href: "/",
+    href: "/custom-chat",
     description:
       "Determine the purpose of the conversation and AI will adapt for that purpose.",
   },

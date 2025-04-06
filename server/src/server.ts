@@ -29,12 +29,13 @@ const logger = winston.createLogger({
 const app = express();
 const server = http.createServer(app);
 const port = process.env.SOCKET_PORT || 3001;
-
-app.use(
-  morgan("combined", {
-    stream: { write: (message) => logger.info(message.trim()) },
-  })
-);
+if (process.env.NODE_ENV === "production") {
+  app.use(
+    morgan("combined", {
+      stream: { write: (message) => logger.info(message.trim()) },
+    })
+  );
+}
 
 const io = new Server(server, {
   cors: {
