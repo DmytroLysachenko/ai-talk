@@ -1,18 +1,20 @@
 "use client";
 
-import MicrophoneButton from "@/components/MicrophoneButton";
+import { useState } from "react";
 import { getChatAnswer } from "@/lib/actions/chat.action";
 import useAudioStream from "@/lib/hooks/useAudioStream";
 import useChat from "@/lib/hooks/useChat";
 import useSpeechRecognition from "@/lib/hooks/useSpeechRecognition";
 import { languageLearning } from "@/lib/instructions";
+import MicrophoneButton from "@/components/MicrophoneButton";
+import ChatContainer from "@/components/ChatContainer";
 
 const TalkingAi = () => {
   const { messagesLog, addMessage } = useChat();
   const { currentSpeech, isSpeaking, startSpeaking, stopSpeaking } =
     useSpeechRecognition("en-US");
-
-  const { playStreamedAudio } = useAudioStream();
+  const { isStreaming, isPlaying, playStreamedAudio } = useAudioStream();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleFetchAnswer = async (
     messagesLog: { author: string; message: string }[]
@@ -31,6 +33,7 @@ const TalkingAi = () => {
   };
 
   const handleEndSpeaking = async () => {
+    setIsProcessing(true);
     const userMessage = await stopSpeaking();
 
     addMessage({ author: "user", message: userMessage });
@@ -43,32 +46,35 @@ const TalkingAi = () => {
     if (message) {
       addMessage({ author: "ai", message });
 
-      playStreamedAudio(message);
+      await playStreamedAudio(message);
     }
+
+    setIsProcessing(false);
   };
 
   return (
-    <main className="min-h-[80vh] flex w-full px-5 md:px-10 lg:px-20">
-      <div className="flex flex-col justify-between items-center py-10 px-5 gap-5 w-full">
-        <div className="flex flex-1 flex-col gap-5 justify-end py-5 border p-4 rounded-2xl w-full">
-          {messagesLog.map((m, index) => (
-            <p
-              key={`${m.author}-${index}`}
-              className={m.author === "user" ? "text-blue-500" : ""}
-            >
-              {m.author} : {m.message}
-            </p>
-          ))}
-          {isSpeaking && currentSpeech && (
-            <p className="text-blue-500 opacity-70">
-              you (speaking): {currentSpeech}
-            </p>
-          )}
-        </div>
+    <main className="container py-8 max-w-4xl mx-auto">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold mb-2">Talking AI Assistant</h1>
+        <p className="text-muted-foreground">
+          Have a conversation with AI to practice your language skills. The AI
+          will respond with voice.
+        </p>
+      </div>
 
-        <div className="flex flex-col gap-4 items-center">
+      <div className="flex flex-col h-[60vh] border rounded-lg p-6 bg-card/50">
+        <ChatContainer
+          messages={messagesLog}
+          currentSpeech={currentSpeech}
+          isSpeaking={isSpeaking}
+        />
+
+        <div className="flex justify-center mt-6">
           <MicrophoneButton
             isSpeaking={isSpeaking}
+            isProcessing={isProcessing}
+            isStreaming={isStreaming}
+            isPlaying={isPlaying}
             handleStartSpeaking={startSpeaking}
             handleEndSpeaking={handleEndSpeaking}
           />

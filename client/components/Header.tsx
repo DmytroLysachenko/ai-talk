@@ -18,11 +18,25 @@ const tools = [
   },
   {
     title: "Speech to Text",
-    href: "/speech-convertor",
+    href: "/speech-convertor/text",
     description:
       "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read text.",
     icon: "📝",
   },
+  // {
+  //   title: "Speech to Prompt",
+  //   href: "/speech-convertor/prompt",
+  //   description:
+  //     "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read AI prompt.",
+  //   icon: "📝",
+  // },
+  // {
+  //   title: "Speech to Mail",
+  //   href: "/speech-convertor/mail",
+  //   description:
+  //     "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read email.",
+  //   icon: "📝",
+  // },
   {
     title: "Custom AI Chat",
     href: "/custom-chat",
@@ -38,7 +52,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between">
+      <div className="flex h-16 items-center justify-between px-10">
         <Link
           href="/"
           className="flex items-center space-x-2"
@@ -67,12 +81,10 @@ const Header = () => {
               </Link>
             ))}
           </nav>
-          <ModeToggle />
         </div>
 
         {/* Mobile Menu Button */}
         <div className="flex md:hidden items-center space-x-2">
-          <ModeToggle />
           <Button
             variant="ghost"
             size="icon"
@@ -86,6 +98,8 @@ const Header = () => {
             )}
           </Button>
         </div>
+
+        <ModeToggle />
       </div>
 
       {/* Mobile Menu */}

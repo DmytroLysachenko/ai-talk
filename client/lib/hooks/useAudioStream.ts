@@ -63,7 +63,7 @@ const useAudioStream = () => {
     socket.emit("generate_audio", message);
   };
 
-  return { isPlaying, playStreamedAudio };
+  return { isPlaying, isStreaming, playStreamedAudio };
 };
 
 export default useAudioStream;

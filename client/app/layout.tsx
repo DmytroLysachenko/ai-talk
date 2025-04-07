@@ -34,7 +34,7 @@ const RootLayout = ({
       suppressHydrationWarning
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col w-full`}
       >
         <ThemeProvider
           attribute="class"
