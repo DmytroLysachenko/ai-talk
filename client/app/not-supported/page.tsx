@@ -1,83 +1,63 @@
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { CheckCircle2 } from "lucide-react";
 
 const NotSupportedPage = () => {
   return (
-    <main className="flex flex-col items-center justify-center p-24">
-      <div className="max-w-2xl mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-6 text-red-600">
-          Browser Not Supported
-        </h1>
-        <div className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-xl mb-4">
-            We&apos;re sorry, but Mozilla Firefox doesn&apos;t support the
-            Speech Recognition API that our application requires.
-          </p>
-          <p className="text-lg mb-6">
-            Please use one of the following browsers to access our application:
-          </p>
-          <ul className="text-left inline-block mb-6">
-            <li className="mb-2 flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2 text-green-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              Google Chrome
-            </li>
-            <li className="mb-2 flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2 text-green-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              Microsoft Edge
-            </li>
-            <li className="mb-2 flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2 text-green-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              Safari
-            </li>
-          </ul>
-        </div>
-        <Link
-          href="/"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-        >
-          Back to Home
-        </Link>
-      </div>
-    </main>
+    <div className="container flex items-center justify-center min-h-[calc(100vh-12rem)] py-10">
+      <Card className="max-w-2xl w-full">
+        <CardHeader className="text-center space-y-2">
+          <CardTitle className="text-3xl font-bold text-destructive">
+            Browser Not Supported
+          </CardTitle>
+          <CardDescription className="text-lg">
+            We're unable to access the Speech Recognition API in your browser
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="p-4 rounded-lg bg-destructive/10 border border-destructive/20 text-center">
+            <p className="mb-4">
+              We're sorry, but Mozilla Firefox doesn't support the Speech
+              Recognition API that our application requires.
+            </p>
+            <p className="font-medium">
+              Please use one of the following browsers to access our
+              application:
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 p-2 rounded-md border bg-card">
+              <CheckCircle2 className="h-5 w-5 text-primary" />
+              <span className="font-medium">Google Chrome</span>
+            </div>
+            <div className="flex items-center gap-2 p-2 rounded-md border bg-card">
+              <CheckCircle2 className="h-5 w-5 text-primary" />
+              <span className="font-medium">Microsoft Edge</span>
+            </div>
+            <div className="flex items-center gap-2 p-2 rounded-md border bg-card">
+              <CheckCircle2 className="h-5 w-5 text-primary" />
+              <span className="font-medium">Safari</span>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Link href="/">
+            <Button>Back to Home</Button>
+          </Link>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 

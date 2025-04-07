@@ -2,90 +2,127 @@
 
 import * as React from "react";
 import Link from "next/link";
-
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-// import { Icons } from "@/components/icons";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
+import { ModeToggle } from "./mode-toggler";
+import { Menu, X } from "lucide-react";
 
-const components: { title: string; href: string; description: string }[] = [
+const tools = [
   {
     title: "Talking AI Pal",
     href: "/talking-ai",
     description:
-      "A talking AI assistant. Perfect for having conversations for english learning",
+      "A talking AI assistant. Perfect for having conversations for English learning.",
+    icon: "🗣️",
   },
   {
-    title: "Fast text generation from speech.",
+    title: "Speech to Text",
     href: "/speech-convertor",
     description:
-      "Express everything, what you have on your mind and AI will deal with converting it in a original, structured and easy to read text.",
+      "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read text.",
+    icon: "📝",
   },
   {
-    title: "Custom purpose AI chatbot",
+    title: "Custom AI Chat",
     href: "/custom-chat",
     description:
-      "Determine the purpose of the conversation and AI will adapt for that purpose.",
+      "Determine the purpose of the conversation and AI will adapt to that purpose.",
+    icon: "💬",
   },
 ];
 
 const Header = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const pathname = usePathname();
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background flex justify-center py-4">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Tools</NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                {components.map((component) => (
-                  <ListItem
-                    key={component.title}
-                    title={component.title}
-                    href={component.href}
-                  >
-                    {component.description}
-                  </ListItem>
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center justify-between">
+        <Link
+          href="/"
+          className="flex items-center space-x-2"
+        >
+          <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            AI Talk
+          </span>
+        </Link>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex md:items-center md:space-x-6">
+          <nav className="flex items-center space-x-6">
+            {tools.map((tool) => (
+              <Link
+                key={tool.title}
+                href={tool.href}
+                className={cn(
+                  "relative flex items-center text-sm font-medium transition-colors hover:text-foreground/80",
+                  pathname === tool.href
+                    ? "text-foreground after:absolute after:-bottom-[21px] after:left-0 after:h-[2px] after:w-full after:bg-primary"
+                    : "text-foreground/60"
+                )}
+              >
+                <span className="mr-1">{tool.icon}</span>
+                {tool.title}
+              </Link>
+            ))}
+          </nav>
+          <ModeToggle />
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="flex md:hidden items-center space-x-2">
+          <ModeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t px-4">
+          <div className="container py-4 space-y-4">
+            <p className="text-sm font-medium text-muted-foreground">
+              AI Tools
+            </p>
+            <div className="grid gap-3">
+              {tools.map((tool) => (
+                <Link
+                  key={tool.title}
+                  href={tool.href}
+                  className={cn(
+                    "flex items-center space-x-3 rounded-md p-3 text-sm font-medium",
+                    pathname === tool.href
+                      ? "bg-accent text-accent-foreground"
+                      : "hover:bg-accent/50"
+                  )}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="text-lg">{tool.icon}</span>
+                  <div>
+                    <div className="font-medium">{tool.title}</div>
+                    <div className="text-xs text-muted-foreground line-clamp-1">
+                      {tool.description}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
-
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
-ListItem.displayName = "ListItem";
 
 export default Header;
