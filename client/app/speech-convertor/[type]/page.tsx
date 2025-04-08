@@ -7,7 +7,7 @@ import useSpeechRecognition from "@/lib/hooks/useSpeechRecognition";
 import { speechToTextTypes } from "@/lib/instructions";
 import MicrophoneButton from "@/components/MicrophoneButton";
 import ChatContainer from "@/components/ChatContainer";
-import { Copy } from "lucide-react";
+import { ArrowLeft, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { useParams, useRouter } from "next/navigation";
 
@@ -67,11 +67,20 @@ const SpeechConvertor = () => {
   };
 
   return (
-    <main className="container py-8 max-w-4xl mx-auto">
+    <main className="relative py-8 max-w-4xl mx-auto">
+      <button
+        className="absolute top-4 left-0 cursor-pointer bg-accent/40 p-2 rounded-full"
+        onClick={() => router.back()}
+      >
+        <ArrowLeft className="h-6 w-6" />
+      </button>
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-2">Speech to Text Converter</h1>
+        <h1 className="text-3xl font-bold mb-2">
+          Speech to <span className="capitalize">{type}</span> Converter
+        </h1>
         <p className="text-muted-foreground">
-          Speak your thoughts and AI will convert them into well-structured text
+          Speak your thoughts and AI will convert them into well-structured{" "}
+          {type}
         </p>
       </div>
 

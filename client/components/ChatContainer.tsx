@@ -1,3 +1,6 @@
+import { parseMessageWithCodeBlocks } from "@/lib/utils";
+import CodeSnippet from "./CodeSnippet";
+
 interface ChatContainerProps {
   messages: Array<{ author: string; message: string; timestamp?: Date }>;
   currentSpeech?: string;
@@ -36,17 +39,33 @@ const ChatContainer = ({
             <div
               className={`flex flex-col ${
                 m.author === "user" ? "items-end" : "items-start"
-              }`}
+              } max-w-[85%]`}
             >
-              <div
-                className={`max-w-[80%] break-words rounded-lg p-3 text-sm ${
-                  m.author === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-foreground"
-                }`}
-              >
-                {m.message}
-              </div>
+              {m.author === "user" ? (
+                <div className="rounded-lg p-3 text-sm bg-primary text-primary-foreground">
+                  {m.message}
+                </div>
+              ) : (
+                <div className="space-y-3 w-full">
+                  {parseMessageWithCodeBlocks(m.message).map((part, i) =>
+                    part.type === "text" ? (
+                      <div
+                        key={i}
+                        className="rounded-lg p-3 text-sm bg-muted text-foreground whitespace-pre-wrap"
+                      >
+                        {part.content}
+                      </div>
+                    ) : (
+                      <CodeSnippet
+                        key={i}
+                        code={part.content}
+                        language={part.language}
+                        className="w-full"
+                      />
+                    )
+                  )}
+                </div>
+              )}
 
               {m.timestamp && (
                 <span className="text-xs text-muted-foreground mt-1">
