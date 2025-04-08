@@ -17,26 +17,12 @@ const tools = [
     icon: "🗣️",
   },
   {
-    title: "Speech to Text",
-    href: "/speech-convertor/text",
+    title: "Speech Converter",
+    href: "/speech-convertor",
     description:
       "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read text.",
     icon: "📝",
   },
-  // {
-  //   title: "Speech to Prompt",
-  //   href: "/speech-convertor/prompt",
-  //   description:
-  //     "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read AI prompt.",
-  //   icon: "📝",
-  // },
-  // {
-  //   title: "Speech to Mail",
-  //   href: "/speech-convertor/mail",
-  //   description:
-  //     "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read email.",
-  //   icon: "📝",
-  // },
   {
     title: "Custom AI Chat",
     href: "/custom-chat",
