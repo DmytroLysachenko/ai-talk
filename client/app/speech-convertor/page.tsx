@@ -41,7 +41,7 @@ const conversionTypes = [
 
 const SpeechConvertorHome = () => {
   return (
-    <main className="container py-8 max-w-5xl mx-auto">
+    <main className="container py-8 max-w-6xl mx-auto">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-3">Speech to Text Converter</h1>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">

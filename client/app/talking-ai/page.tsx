@@ -53,7 +53,7 @@ const TalkingAi = () => {
   };
 
   return (
-    <main className="container py-8 max-w-4xl mx-auto">
+    <main className="container py-8 max-w-6xl mx-auto">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold mb-2">Talking AI Assistant</h1>
         <p className="text-muted-foreground">

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="w-full border-t bg-background py-6">
+    <footer className="w-full border-t bg-background py-6 mt-auto">
       <div className=" flex flex-col items-center justify-between gap-4 md:flex-row px-16">
         <p className="text-center text-sm text-muted-foreground md:text-left">
           &copy; {new Date().getFullYear()} AI Talk App. All rights reserved.

@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { Mic, MicOff, Loader2 } from "lucide-react";
 
 interface MicrophoneButtonProps {
@@ -25,15 +26,13 @@ const MicrophoneButton = ({
     <button
       onClick={isSpeaking ? handleEndSpeaking : handleStartSpeaking}
       disabled={isDisabled}
-      className={`
-        rounded-full h-16 w-16 flex items-center justify-center transition-all
-        ${
-          isSpeaking
-            ? "bg-destructive hover:bg-destructive/90"
-            : "bg-primary hover:bg-primary/90"
-        }
-        ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}
-      `}
+      className={cn(
+        "rounded-full h-16 w-16 flex items-center justify-center transition-all cursor-pointer",
+        isSpeaking
+          ? "bg-destructive hover:bg-destructive/90"
+          : "bg-primary hover:bg-primary/90",
+        isDisabled ? "opacity-50 cursor-not-allowed" : ""
+      )}
     >
       {isProcessing ? (
         <Loader2 className="h-6 w-6 animate-spin text-white" />

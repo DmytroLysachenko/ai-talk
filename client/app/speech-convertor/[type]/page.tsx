@@ -67,7 +67,7 @@ const SpeechConvertor = () => {
   };
 
   return (
-    <main className="relative py-8 max-w-4xl mx-auto">
+    <main className="container relative py-8 max-w-6xl mx-auto">
       <button
         className="absolute top-4 left-0 cursor-pointer bg-accent/40 p-2 rounded-full"
         onClick={() => router.back()}
