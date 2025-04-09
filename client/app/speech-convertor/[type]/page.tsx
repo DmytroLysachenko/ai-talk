@@ -14,91 +14,6 @@ import { frameworkOptions, languageOptions, styleOptions } from "@/constants";
 import ChatContainerPlaceholder from "@/components/ChatContainerPlaceholder";
 import OptionSelector from "@/components/OptionSelector";
 
-const placeholders: Record<string, React.ReactNode> = {
-  text: (
-    <div className="max-w-lg text-center space-y-4 p-4">
-      <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-        <Mic className="h-6 w-6 text-primary" />
-      </div>
-      <h3 className="text-lg font-medium">Text Formatting Example</h3>
-      <p className="text-muted-foreground text-sm">
-        Press the microphone button and try saying something like:
-      </p>
-      <div className="bg-muted p-3 rounded-md text-sm">
-        "I want to write a paragraph about the benefits of artificial
-        intelligence in healthcare including improved diagnosis faster treatment
-        planning and better patient outcomes"
-      </div>
-      <p className="text-xs text-muted-foreground">
-        The AI will format your speech into well-structured paragraphs with
-        proper punctuation and grammar.
-      </p>
-    </div>
-  ),
-
-  code: (
-    <div className="max-w-lg text-center space-y-4 p-4">
-      <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-        <Code className="h-6 w-6 text-primary" />
-      </div>
-      <h3 className="text-lg font-medium">Code Generation Example</h3>
-      <p className="text-muted-foreground text-sm">
-        Press the microphone button and try saying something like:
-      </p>
-      <div className="bg-muted p-3 rounded-md text-sm">
-        "Create a function that takes an array of numbers and returns the sum of
-        all even numbers in the array"
-      </div>
-      <p className="text-xs text-muted-foreground mt-2">
-        Use the technology selectors above to customize the language, styling,
-        and framework for your code.
-      </p>
-    </div>
-  ),
-
-  mail: (
-    <div className="max-w-lg text-center space-y-4 p-4">
-      <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-        <Mic className="h-6 w-6 text-primary" />
-      </div>
-      <h3 className="text-lg font-medium">Email Draft Example</h3>
-      <p className="text-muted-foreground text-sm">
-        Press the microphone button and try saying something like:
-      </p>
-      <div className="bg-muted p-3 rounded-md text-sm">
-        "Write an email to my team about the project deadline extension we need
-        to move the delivery date from May 15th to May 30th because we're
-        waiting for client feedback"
-      </div>
-      <p className="text-xs text-muted-foreground">
-        The AI will create a professional email with proper greeting, body, and
-        sign-off.
-      </p>
-    </div>
-  ),
-
-  prompt: (
-    <div className="max-w-lg text-center space-y-4 p-4">
-      <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-        <Mic className="h-6 w-6 text-primary" />
-      </div>
-      <h3 className="text-lg font-medium">AI Prompt Example</h3>
-      <p className="text-muted-foreground text-sm">
-        Press the microphone button and try saying something like:
-      </p>
-      <div className="bg-muted p-3 rounded-md text-sm">
-        "Create a prompt for DALL-E to generate an image of a futuristic city
-        with flying cars tall glass buildings and a sunset in the background
-        with a cyberpunk aesthetic"
-      </div>
-      <p className="text-xs text-muted-foreground">
-        The AI will craft an effective prompt optimized for image generation
-        systems like DALL-E or Midjourney.
-      </p>
-    </div>
-  ),
-};
-
 const SpeechConvertor = () => {
   const { type } = useParams<{ type: string }>();
   const router = useRouter();
@@ -222,6 +137,7 @@ const SpeechConvertor = () => {
           </div>
         </div>
       )}
+
       <div className="flex flex-col h-[60vh] border rounded-lg p-6 bg-card/50">
         <ChatContainer
           messages={messagesLog}

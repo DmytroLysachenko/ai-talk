@@ -31,7 +31,7 @@ export const getChatAnswer = async ({
         message,
       });
 
-    return { success: true, answer: response.text };
+    return { success: true, answer: response.text?.replaceAll("*", "") };
   } catch (error) {
     console.log(error);
     return {

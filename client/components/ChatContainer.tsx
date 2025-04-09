@@ -5,21 +5,27 @@ interface ChatContainerProps {
   messages: Array<{ author: string; message: string; timestamp?: Date }>;
   currentSpeech?: string;
   isSpeaking?: boolean;
+  placeholder?: React.ReactNode;
 }
 
 const ChatContainer = ({
   messages,
   currentSpeech,
   isSpeaking,
+  placeholder,
 }: ChatContainerProps) => {
   return (
     <div className="flex-1 p-4 rounded-lg border bg-background overflow-auto max-h-[60vh]">
       <div className="flex flex-col space-y-4 min-h-[300px]">
         {messages.length === 0 && (
           <div className="flex items-center justify-center h-full">
-            <p className="text-muted-foreground text-center">
-              No messages yet. Start a conversation!
-            </p>
+            {placeholder ? (
+              placeholder
+            ) : (
+              <p className="text-muted-foreground text-center">
+                No messages yet. Start a conversation!
+              </p>
+            )}
           </div>
         )}
 

@@ -33,21 +33,21 @@ const RootLayout = ({
       lang="en"
       suppressHydrationWarning
     >
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen w-full flex flex-col`}
       >
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen w-full flex flex-col`}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
           <Header />
           {children}
           <Footer />
-          <Toaster />
-        </body>
-      </ThemeProvider>
+          <Toaster />{" "}
+        </ThemeProvider>
+      </body>
     </html>
   );
 };
