@@ -1,12 +1,5 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Mic, MessageSquare, FileText } from "lucide-react";
 
 const Home = () => {
@@ -40,7 +33,7 @@ const Home = () => {
   return (
     <main className="container py-8 max-w-6xl mx-auto">
       <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-        <div className=" px-4 md:px-6">
+        <div className="px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
@@ -72,7 +65,7 @@ const Home = () => {
         id="features"
         className="w-full py-12 md:py-24 lg:py-32"
       >
-        <div className=" px-4 md:px-6">
+        <div className="px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
@@ -86,24 +79,26 @@ const Home = () => {
           </div>
           <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8 mt-8">
             {features.map((feature) => (
-              <Card
+              <div
                 key={feature.title}
-                className="flex flex-col h-full"
+                className="flex flex-col h-full border rounded-lg shadow-sm bg-card overflow-hidden"
               >
-                <CardHeader>
+                <div className="p-6 space-y-2">
                   <div className={`${feature.color} mb-2`}>{feature.icon}</div>
-                  <CardTitle>{feature.title}</CardTitle>
-                  <CardDescription>{feature.description}</CardDescription>
-                </CardHeader>
-                <CardFooter className="mt-auto pt-4">
+                  <h3 className="text-lg font-semibold">{feature.title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {feature.description}
+                  </p>
+                </div>
+                <div className="p-6 pt-0 mt-auto">
                   <Link
                     href={feature.href}
                     className="w-full"
                   >
                     <Button className="w-full">Try Now</Button>
                   </Link>
-                </CardFooter>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         </div>
