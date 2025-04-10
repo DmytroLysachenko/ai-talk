@@ -1,23 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { ArrowLeft, Copy, Code } from "lucide-react";
+import { toast } from "sonner";
+import { useParams, useRouter } from "next/navigation";
+
+import {
+  FRAMEWORK_OPTIONS,
+  LANGUAGE_OPTIONS,
+  STYLE_OPTIONS,
+} from "@/constants";
+import ChatContainerPlaceholder from "@/components/ChatContainerPlaceholder";
+import OptionSelector from "@/components/OptionSelector";
 import { getMessageAnswer } from "@/lib/actions/chat.action";
 import useChat from "@/lib/hooks/useChat";
 import useSpeechRecognition from "@/lib/hooks/useSpeechRecognition";
 import { speechToCodeInstruction, speechToTextTypes } from "@/lib/instructions";
 import MicrophoneButton from "@/components/MicrophoneButton";
 import ChatContainer from "@/components/ChatContainer";
-import { ArrowLeft, Copy, Code, Check, Mic } from "lucide-react";
-import { toast } from "sonner";
-import { useParams, useRouter } from "next/navigation";
-import { frameworkOptions, languageOptions, styleOptions } from "@/constants";
-import ChatContainerPlaceholder from "@/components/ChatContainerPlaceholder";
-import OptionSelector from "@/components/OptionSelector";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const SpeechConvertor = () => {
   const { type } = useParams<{ type: string }>();
   const router = useRouter();
-
+  const [recognitionLanguage, setRecognitionLanguage] = useState("en-US");
   useEffect(() => {
     if (!speechToTextTypes[type] && type !== "code") {
       router.push("/speech-convertor");
@@ -27,7 +33,7 @@ const SpeechConvertor = () => {
   const { messagesLog, addMessage } = useChat();
 
   const { currentSpeech, isSpeaking, startSpeaking, stopSpeaking } =
-    useSpeechRecognition("en-US");
+    useSpeechRecognition(recognitionLanguage);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
 
@@ -95,16 +101,27 @@ const SpeechConvertor = () => {
         >
           <ArrowLeft className="h-6 w-6" />
         </button>
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">
             Speech to <span className="capitalize">{type}</span> Converter
           </h1>
+
           <p className="text-muted-foreground">
             Speak your thoughts and AI will convert them into well-structured{" "}
             {type}
           </p>
         </div>
       </div>
+
+      <LanguageSelector
+        currentOption={recognitionLanguage}
+        onChange={(value: string) => {
+          setRecognitionLanguage(value);
+        }}
+        label="Speech Recognition Language"
+        className="flex flex-col items-end mb-5"
+      />
 
       {showTechSelectors && (
         <div className="mb-6 p-4 border rounded-lg bg-card/50">
@@ -116,21 +133,21 @@ const SpeechConvertor = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <OptionSelector
               title="Language"
-              options={languageOptions}
+              options={LANGUAGE_OPTIONS}
               value={language}
               onChange={setLanguage}
             />
 
             <OptionSelector
               title="Styling"
-              options={styleOptions}
+              options={STYLE_OPTIONS}
               value={styleType}
               onChange={setStyleType}
             />
 
             <OptionSelector
               title="Framework"
-              options={frameworkOptions}
+              options={FRAMEWORK_OPTIONS}
               value={framework}
               onChange={setFramework}
             />

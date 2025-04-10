@@ -47,7 +47,7 @@ const useSpeechRecognition = (language: string) => {
       recognitionRef.current?.removeEventListener("end", handleEnd);
       recognitionRef.current?.stop();
     };
-  }, []);
+  }, [language]);
 
   const startSpeaking = () => {
     setCurrentSpeech("");

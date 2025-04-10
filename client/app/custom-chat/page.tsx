@@ -1,21 +1,25 @@
 "use client";
 
 import { useState, useRef, type FormEvent } from "react";
+import { Send, Copy } from "lucide-react";
+import { toast } from "sonner";
+
 import { getChatAnswer } from "@/lib/actions/chat.action";
 import useChat from "@/lib/hooks/useChat";
 import ChatContainer from "@/components/ChatContainer";
-import { Send, Copy } from "lucide-react";
-import { toast } from "sonner";
 
 const CustomChat = () => {
   const { messagesLog, addMessage } = useChat();
   const [input, setInput] = useState("");
   const [instructions, setInstructions] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [instructionsFixed, setInstructionsFixed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!instructionsFixed) setInstructionsFixed(true);
 
     if (!input.trim()) return;
 
@@ -29,6 +33,7 @@ const CustomChat = () => {
 
     if (success && answer) {
       addMessage({ author: "ai", message: answer });
+      setInput("");
     } else {
       addMessage({
         author: "ai",
@@ -39,7 +44,6 @@ const CustomChat = () => {
       });
     }
 
-    setInput("");
     setIsSubmitting(false);
     inputRef.current?.focus();
   };
@@ -85,6 +89,7 @@ const CustomChat = () => {
             id="instructions"
             placeholder="Enter instructions for the AI (e.g., 'Act as a language tutor', 'Help me brainstorm ideas', etc.)"
             value={instructions}
+            disabled={instructionsFixed}
             onChange={(e) => setInstructions(e.target.value)}
             className="w-full min-h-[100px] resize-none p-3 rounded-md border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
@@ -99,7 +104,7 @@ const CustomChat = () => {
           >
             <input
               ref={inputRef}
-              value={input}
+              value={!isSubmitting ? input : "Submitting..."}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
               disabled={isSubmitting}
