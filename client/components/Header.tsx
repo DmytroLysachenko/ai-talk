@@ -3,34 +3,12 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./mode-toggler";
-import { Menu, X } from "lucide-react";
-
-const tools = [
-  {
-    title: "Talking AI Pal",
-    href: "/talking-ai",
-    description:
-      "A talking AI assistant. Perfect for having conversations for English learning.",
-    icon: "🗣️",
-  },
-  {
-    title: "Speech Converter",
-    href: "/speech-convertor",
-    description:
-      "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read text.",
-    icon: "📝",
-  },
-  {
-    title: "Custom AI Chat",
-    href: "/custom-chat",
-    description:
-      "Determine the purpose of the conversation and AI will adapt to that purpose.",
-    icon: "💬",
-  },
-];
+import { HEADER_LINKS } from "@/constants";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -51,19 +29,19 @@ const Header = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex md:items-center md:space-x-6">
           <nav className="flex items-center space-x-6">
-            {tools.map((tool) => (
+            {HEADER_LINKS.map((link) => (
               <Link
-                key={tool.title}
-                href={tool.href}
+                key={link.title}
+                href={link.href}
                 className={cn(
                   "relative flex items-center text-sm font-medium transition-colors hover:text-foreground/80",
-                  pathname === tool.href
+                  pathname === link.href
                     ? "text-foreground after:absolute after:-bottom-[21px] after:left-0 after:h-[2px] after:w-full after:bg-primary"
                     : "text-foreground/60"
                 )}
               >
-                <span className="mr-1">{tool.icon}</span>
-                {tool.title}
+                <span className="mr-1">{link.icon}</span>
+                {link.title}
               </Link>
             ))}
           </nav>
@@ -93,26 +71,26 @@ const Header = () => {
         <div className="md:hidden border-t px-4">
           <div className="container py-4 space-y-4">
             <p className="text-sm font-medium text-muted-foreground">
-              AI Tools
+              AI links
             </p>
             <div className="grid gap-3">
-              {tools.map((tool) => (
+              {HEADER_LINKS.map((link) => (
                 <Link
-                  key={tool.title}
-                  href={tool.href}
+                  key={link.title}
+                  href={link.href}
                   className={cn(
                     "flex items-center space-x-3 rounded-md p-3 text-sm font-medium",
-                    pathname === tool.href
+                    pathname === link.href
                       ? "bg-accent text-accent-foreground"
                       : "hover:bg-accent/50"
                   )}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <span className="text-lg">{tool.icon}</span>
+                  <span className="text-lg">{link.icon}</span>
                   <div>
-                    <div className="font-medium">{tool.title}</div>
+                    <div className="font-medium">{link.title}</div>
                     <div className="text-xs text-muted-foreground line-clamp-1">
-                      {tool.description}
+                      {link.description}
                     </div>
                   </div>
                 </Link>

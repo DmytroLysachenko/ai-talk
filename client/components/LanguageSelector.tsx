@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Check, Globe, ChevronDown } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import { SPEECH_LANGUAGES } from "@/constants";
 
@@ -22,12 +23,10 @@ const LanguageSelector = ({
   const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Prevent hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -72,7 +71,9 @@ const LanguageSelector = ({
       >
         <span className="flex items-center gap-2">
           <Globe className="h-4 w-4 text-muted-foreground" />
+
           <span className="mr-1">{selectedLanguage.flag}</span>
+
           <span>{selectedLanguage.label}</span>
         </span>
         <ChevronDown
@@ -100,7 +101,6 @@ const LanguageSelector = ({
                   currentOption === language.value ? "bg-accent/30" : ""
                 )}
                 onClick={() => {
-                  console.log(language.value);
                   onChange(language.value);
                   setIsOpen(false);
                 }}

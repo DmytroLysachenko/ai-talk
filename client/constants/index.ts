@@ -42,3 +42,27 @@ export const SPEECH_LANGUAGES = [
   { value: "sv-SE", label: "Svenska", flag: "🇸🇪" },
   { value: "tr-TR", label: "Türkçe", flag: "🇹🇷" },
 ];
+
+export const HEADER_LINKS = [
+  {
+    title: "Talking AI Pal",
+    href: "/talking-ai",
+    description:
+      "A talking AI assistant. Perfect for having conversations for English learning.",
+    icon: "🗣️",
+  },
+  {
+    title: "Speech Converter",
+    href: "/speech-convertor",
+    description:
+      "Express everything you have on your mind and AI will convert it into original, structured, and easy-to-read text.",
+    icon: "📝",
+  },
+  {
+    title: "Custom AI Chat",
+    href: "/custom-chat",
+    description:
+      "Determine the purpose of the conversation and AI will adapt to that purpose.",
+    icon: "💬",
+  },
+];
