@@ -5,7 +5,6 @@ import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-// Create user
 export const createUser = async ({
   name,
   email,
@@ -25,7 +24,6 @@ export const createUser = async ({
       })
       .returning();
 
-    // revalidatePath("/users");
     return { success: true, user, error: null };
   } catch (error) {
     console.log(error);
@@ -33,7 +31,6 @@ export const createUser = async ({
   }
 };
 
-// Read user by ID
 export const getUserById = async (id: string) => {
   try {
     const [user] = await db
@@ -49,7 +46,6 @@ export const getUserById = async (id: string) => {
   }
 };
 
-// Read user by email
 export const getUserByEmail = async (email: string) => {
   try {
     const [user] = await db
@@ -69,7 +65,6 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-// Update user
 export const updateUser = async (
   id: string,
   updates: {
@@ -85,8 +80,6 @@ export const updateUser = async (
       .where(eq(users.id, id))
       .returning();
 
-    // revalidatePath("/users");
-    // revalidatePath(`/users/${id}`);
     return { success: true, user, error: null };
   } catch (error) {
     console.log(error);
@@ -94,7 +87,6 @@ export const updateUser = async (
   }
 };
 
-// Delete user
 export const deleteUser = async (id: string) => {
   try {
     const [user] = await db.delete(users).where(eq(users.id, id)).returning();
@@ -107,7 +99,6 @@ export const deleteUser = async (id: string) => {
   }
 };
 
-// List all users
 export const getAllUsers = async () => {
   try {
     const allUsers = await db.select().from(users);
