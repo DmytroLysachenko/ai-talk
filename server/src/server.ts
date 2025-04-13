@@ -19,7 +19,7 @@ let tts: KokoroTTS | null = null;
   try {
     tts = await KokoroTTS.from_pretrained(
       "onnx-community/Kokoro-82M-v1.0-ONNX",
-      { dtype: "fp32" }
+      { dtype: "q4f16" }
     );
   } catch (error) {
     console.log(error);
