@@ -5,7 +5,7 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node --expose-gc --max-old-space-size=512 dist/server.js",
     "dev": "nodemon",
     "build": "tsc",
     "prebuild": "rm -rf dist"
