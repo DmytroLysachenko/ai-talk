@@ -5,7 +5,7 @@ import { KokoroTTS, TextSplitterStream } from "kokoro-js";
 
 const app = express();
 const server = http.createServer(app);
-const port = process.env.SOCKET_PORT || 3001;
+const port = process.env.PORT || 3001;
 
 const io = new Server(server, {
   cors: {
