@@ -5,7 +5,7 @@ import { KokoroTTS, TextSplitterStream } from "kokoro-js";
 
 const app = express();
 const server = http.createServer(app);
-const port = process.env.PORT || 3001;
+const port = parseInt(process.env.PORT || "3001", 10);
 
 const io = new Server(server, {
   cors: {
@@ -62,6 +62,10 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("❌ Client disconnected", socket.id);
   });
+});
+
+app.get("/", (req, res) => {
+  res.send("Server is alive!");
 });
 
 server.listen(port, () => {
