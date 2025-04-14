@@ -15,16 +15,26 @@ const io = new Server(server, {
 });
 
 let tts: KokoroTTS | null = null;
+let unloadTimeout: NodeJS.Timeout | null = null;
 
 async function getTTS(): Promise<KokoroTTS> {
   if (tts) return tts;
 
   console.log("⏳ Loading Kokoro TTS model...");
   tts = await KokoroTTS.from_pretrained("onnx-community/Kokoro-82M-v1.0-ONNX", {
-    dtype: "q8",
+    dtype: "q4f16", // Lowest quantization, best for RAM
   });
   console.log("✅ TTS model loaded.");
   return tts;
+}
+
+function scheduleModelUnload(delay = 60000) {
+  if (unloadTimeout) clearTimeout(unloadTimeout);
+  unloadTimeout = setTimeout(() => {
+    console.log("🧹 Unloading TTS model from memory.");
+    tts = null;
+    global.gc?.(); // Manual GC if exposed
+  }, delay);
 }
 
 io.on("connection", (socket) => {
@@ -36,20 +46,38 @@ io.on("connection", (socket) => {
 
       const splitter = new TextSplitterStream();
       const stream = tts.stream(splitter);
-      splitter.push(message);
-      splitter.close();
 
-      for await (const { audio } of stream) {
-        if (audio) {
+      const tokens = message.match(/\s*\S+/g) || [];
+
+      // Begin streaming in the background
+      (async () => {
+        let chunkCount = 0;
+        for await (const { audio } of stream) {
+          if (!audio) continue;
+
           const buffer = audio.toWav();
           const base64Audio = Buffer.from(buffer).toString("base64");
+
           socket.emit("audio_chunk", base64Audio);
-          await new Promise((resolve) => setTimeout(resolve, 200));
+
+          chunkCount++;
+          if (chunkCount % 3 === 0) global.gc?.(); // Soft GC every few chunks
+
+          await new Promise((resolve) => setTimeout(resolve, 300));
         }
+
+        socket.emit("audio_end");
+        console.log(`✅ Audio streaming completed for message: "${message}"`);
+
+        scheduleModelUnload();
+      })();
+
+      for (const token of tokens) {
+        splitter.push(token);
+        await new Promise((r) => setTimeout(r, 10)); // Gentle push
       }
 
-      socket.emit("audio_end");
-      console.log(`✅ Audio streaming completed for message: "${message}"`);
+      splitter.close();
     } catch (error) {
       console.log("❌ Error in TTS streaming", error);
       socket.emit("error", "TTS failed.");
@@ -61,7 +89,7 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.send("Server is alive!");
 });
 
