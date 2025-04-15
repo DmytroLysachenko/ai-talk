@@ -44,13 +44,13 @@ export const SPEECH_LANGUAGES = [
 ];
 
 export const HEADER_LINKS = [
-  {
-    title: "Talking AI Pal",
-    href: "/talking-ai",
-    description:
-      "A talking AI assistant. Perfect for having conversations for English learning.",
-    icon: "🗣️",
-  },
+  // {
+  //   title: "Talking AI Pal",
+  //   href: "/talking-ai",
+  //   description:
+  //     "A talking AI assistant. Perfect for having conversations for English learning.",
+  //   icon: "🗣️",
+  // },
   {
     title: "Speech Converter",
     href: "/speech-convertor",
