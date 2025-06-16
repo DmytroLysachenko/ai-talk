@@ -1,4 +1,3 @@
-// Technology options
 export const LANGUAGE_OPTIONS = [
   { value: "none", label: "Only HTML" },
   { value: "javascript", label: "JavaScript" },
@@ -44,13 +43,6 @@ export const SPEECH_LANGUAGES = [
 ];
 
 export const HEADER_LINKS = [
-  // {
-  //   title: "Talking AI Pal",
-  //   href: "/talking-ai",
-  //   description:
-  //     "A talking AI assistant. Perfect for having conversations for English learning.",
-  //   icon: "🗣️",
-  // },
   {
     title: "Speech Converter",
     href: "/speech-convertor",

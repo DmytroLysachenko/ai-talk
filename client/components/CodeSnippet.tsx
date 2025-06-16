@@ -23,7 +23,6 @@ const CodeSnippet = ({
   const codeRef = useRef<HTMLPreElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout>(null);
 
-  // Clean up timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -39,7 +38,6 @@ const CodeSnippet = ({
     setCopied(true);
     toast.success("Code copied to clipboard");
 
-    // Reset copied state after 2 seconds
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -49,14 +47,12 @@ const CodeSnippet = ({
     }, 2000);
   };
 
-  // Count the number of lines for line numbers
   const lineCount = code.split("\n").length;
 
   return (
     <div
       className={`rounded-lg overflow-hidden border bg-card/80 ${className}`}
     >
-      {/* Header with language and copy button */}
       <div className="flex items-center justify-between px-4 py-2 bg-muted/50 border-b">
         <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
           <Terminal className="h-4 w-4" />
@@ -81,10 +77,8 @@ const CodeSnippet = ({
         </button>
       </div>
 
-      {/* Code content with optional line numbers */}
       <div className={`overflow-auto ${maxHeight}`}>
         <div className="flex min-w-full">
-          {/* Line numbers */}
           {showLineNumbers && (
             <div className="text-right pr-4 py-4 select-none bg-muted/30 text-muted-foreground">
               {Array.from({ length: lineCount }).map((_, i) => (
@@ -98,7 +92,6 @@ const CodeSnippet = ({
             </div>
           )}
 
-          {/* Code content */}
           <pre
             ref={codeRef}
             className="flex-1 p-4 overflow-auto font-mono text-sm leading-5 text-foreground"

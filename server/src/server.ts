@@ -22,7 +22,7 @@ async function getTTS(): Promise<KokoroTTS> {
 
   console.log("⏳ Loading Kokoro TTS model...");
   tts = await KokoroTTS.from_pretrained("onnx-community/Kokoro-82M-v1.0-ONNX", {
-    dtype: "q4f16", // Lowest quantization, best for RAM
+    dtype: "q4f16",
   });
   console.log("✅ TTS model loaded.");
   return tts;
@@ -33,7 +33,7 @@ function scheduleModelUnload(delay = 60000) {
   unloadTimeout = setTimeout(() => {
     console.log("🧹 Unloading TTS model from memory.");
     tts = null;
-    global.gc?.(); // Manual GC if exposed
+    global.gc?.();
   }, delay);
 }
 
@@ -49,7 +49,6 @@ io.on("connection", (socket) => {
 
       const tokens = message.match(/\s*\S+/g) || [];
 
-      // Begin streaming in the background
       (async () => {
         let chunkCount = 0;
         for await (const { audio } of stream) {
@@ -61,7 +60,7 @@ io.on("connection", (socket) => {
           socket.emit("audio_chunk", base64Audio);
 
           chunkCount++;
-          if (chunkCount % 3 === 0) global.gc?.(); // Soft GC every few chunks
+          if (chunkCount % 3 === 0) global.gc?.();
 
           await new Promise((resolve) => setTimeout(resolve, 300));
         }
@@ -74,7 +73,7 @@ io.on("connection", (socket) => {
 
       for (const token of tokens) {
         splitter.push(token);
-        await new Promise((r) => setTimeout(r, 10)); // Gentle push
+        await new Promise((r) => setTimeout(r, 10));
       }
 
       splitter.close();

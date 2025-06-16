@@ -15,16 +15,13 @@ export const playAudio = (chunk: string) => {
 };
 
 export const parseMessageWithCodeBlocks = (message: string) => {
-  // Regular expression to match markdown code blocks with optional language
   const codeBlockRegex = /```([a-zA-Z]*)\n([\s\S]*?)```/g;
 
   const parts = [];
   let lastIndex = 0;
   let match;
 
-  // Find all code blocks
   while ((match = codeBlockRegex.exec(message)) !== null) {
-    // Add text before the code block
     if (match.index > lastIndex) {
       parts.push({
         type: "text",
@@ -32,7 +29,6 @@ export const parseMessageWithCodeBlocks = (message: string) => {
       });
     }
 
-    // Add the code block
     parts.push({
       type: "code",
       language: match[1] || "text",
@@ -42,7 +38,6 @@ export const parseMessageWithCodeBlocks = (message: string) => {
     lastIndex = match.index + match[0].length;
   }
 
-  // Add any remaining text after the last code block
   if (lastIndex < message.length) {
     parts.push({
       type: "text",
@@ -50,7 +45,6 @@ export const parseMessageWithCodeBlocks = (message: string) => {
     });
   }
 
-  // If no code blocks were found, return the original message as text
   if (parts.length === 0) {
     parts.push({
       type: "text",
