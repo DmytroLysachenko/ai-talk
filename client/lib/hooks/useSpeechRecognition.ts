@@ -17,7 +17,7 @@ const useSpeechRecognition = (language: string) => {
 
     recognitionRef.current = new SpeechRecognition();
     recognitionRef.current.continuous = true;
-    recognitionRef.current.interimResults = true; // Changed to true to get real-time results
+    recognitionRef.current.interimResults = true;
     recognitionRef.current.lang = language;
 
     const handleResult = (event: SpeechRecognitionEvent) => {
