@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import io, { Socket } from "socket.io-client";
 
-const WS_SERVER = process.env.NEXT_PUBLIC_WS_SERVER || "http://localhost:3001"; // Use env variable
+const WS_SERVER = process.env.NEXT_PUBLIC_WS_SERVER || "http://localhost:3001";
 
 const useAudioStream = () => {
   const [isStreaming, setIsStreaming] = useState(false);
